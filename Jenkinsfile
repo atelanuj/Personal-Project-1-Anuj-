@@ -14,7 +14,7 @@ pipeline {
         stage('Build docker image'){
             steps{
                 script{
-                    sh 'docker build -t youngminds73/devops-integration .'
+                    sh 'docker build -t youngminds73/devops-integration:latest .'
                 }
             }
         }
@@ -25,7 +25,7 @@ pipeline {
                    sh 'docker login -u youngminds73 -p ${dockerhubpwd}'
 
                       }
-                   sh 'docker push youngminds73/devops-integration'
+                   sh 'docker push youngminds73/devops-integration:latest'
                 }
             }
         }
