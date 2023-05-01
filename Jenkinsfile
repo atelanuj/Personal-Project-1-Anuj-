@@ -1,32 +1,33 @@
-pipeline {
+pipeline{
     agent any
     tools{
-        maven 'Maven'
+        maven "myMaven"
     }
     stages{
-        stage('Build Maven'){
+        stage("checkout"){
             steps{
-                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/ygminds73/jenkins-mvn-docker.git']]])
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/atelanuj/jenkins-mvn-docker-Project-3-.git']])
+            }
+        }
+        stage("Build"){
+            steps{
+                sh 'pwd'
+                sh 'ls -l'
                 sh 'mvn clean install'
+                sh 'ls -l'
             }
         }
-    
-        stage('Build docker image'){
+        stage("Docker image BUILD"){
             steps{
-                script{
-                    sh 'docker build -t youngminds73/devops-integration1 .'
-                }
+                sh 'docker build -t anujatel/newbuild .'
             }
         }
-         stage('Push image to Hub'){
+        stage("push to docker hub"){
             steps{
-                script{
-                   withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
-                   sh 'docker login -u youngminds73 -p ${dockerhubpwd}'
-
-                      }
-                   sh 'docker push youngminds73/devops-integration1'
+                withCredentials([string(credentialsId: 'DockerHubPasswd', variable: 'passwd')]) {
+                    sh 'docker login -u anujatel -p $passwd'
                 }
+                sh 'docker push anujatel/newbuild'
             }
         }
     }
