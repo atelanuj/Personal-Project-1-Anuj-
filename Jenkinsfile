@@ -20,7 +20,7 @@ pipeline{
         }
         stage("Docker image BUILD"){
             steps{
-                sh 'docker build -t anujatel/newbuild .'
+                sh 'docker build -t anujatel/newbuild .'  //you also give BUILD_ID  anujatel/newbuild:$BUILD_ID
             }
         }
         stage("push to docker hub"){
@@ -28,7 +28,7 @@ pipeline{
                 withCredentials([string(credentialsId: 'DockerHubPasswd', variable: 'passwd')]) {
                     sh 'docker login -u anujatel -p $passwd'
                 }
-                sh 'docker push anujatel/newbuild'
+                sh 'docker push anujatel/newbuild'  //anujatel/newbuild:$BUILD_ID
             }
         }
     }
