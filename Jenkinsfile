@@ -1,4 +1,3 @@
-//By Anuj
 pipeline{
     agent any
     tools{
@@ -8,6 +7,18 @@ pipeline{
         stage("checkout"){
             steps{
                 checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/atelanuj/jenkins-mvn-docker-Project-3-.git']])
+            }
+        }
+        stage("Code Review"){
+            steps{
+                script{
+                    withSonarQubeEnv(credentialsId: 'SonarToken') {
+                        sh 'mvn sonar:sonar'
+                    }
+                    timeout(time: 1, unit: 'HOURS') {    //qualitGate is true then the rest will run else fail the pipeline
+                      waitForQualityGate abortPipeline: true, credentialsId: 'SonarToken'
+                    }
+                }
             }
         }
         stage("Build"){
@@ -20,7 +31,7 @@ pipeline{
         }
         stage("Docker image BUILD"){
             steps{
-                sh 'docker build -t anujatel/newbuild .'  //you also give BUILD_ID  anujatel/newbuild:$BUILD_ID
+                sh 'docker build -t anujatel/newbuild-$BUILD_NUMBER .'
             }
         }
         stage("push to docker hub"){
@@ -28,7 +39,7 @@ pipeline{
                 withCredentials([string(credentialsId: 'DockerHubPasswd', variable: 'passwd')]) {
                     sh 'docker login -u anujatel -p $passwd'
                 }
-                sh 'docker push anujatel/newbuild'  //anujatel/newbuild:$BUILD_ID
+                sh 'docker push anujatel/newbuild-$BUILD_NUMBER'
             }
         }
     }
