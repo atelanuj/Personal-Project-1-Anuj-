@@ -42,5 +42,12 @@ pipeline{
                 sh 'docker push anujatel/newbuild-$BUILD_NUMBER'
             }
         }
+        stage("Deploy to minikube"){
+            steps{
+                script{
+                    kubernetesDeploy configs: 'deploymentservice.yaml', kubeConfig: [path: ''], kubeconfigId: 'Newmini', secretName: '', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
+                }
+            }
+        }
     }
 }
