@@ -23,10 +23,7 @@ pipeline{
         }*/
         stage("Build"){
             steps{
-                sh 'pwd'
-                sh 'ls -l'
                 sh 'mvn clean install'
-                sh 'ls -l'
             }
         }
         stage("Docker image BUILD"){
@@ -45,8 +42,8 @@ pipeline{
         stage("Deploy to minikube"){
             steps{
                 script{
-                    kubernetesDeploy configs: 'deploymentservice.yaml', kubeConfig: [path: ''], kubeconfigId: 'Newmini', secretName: '', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
-                    sh '/usr/local/bin/kubectl apply -f deploymentservice.yaml'
+                    kubernetesDeploy (configs: 'deploymentservice.yaml', kubeconfigId: 'Newmini')
+                    // sh '/usr/local/bin/kubectl apply -f deploymentservice.yaml'
                 }
             }
         }
