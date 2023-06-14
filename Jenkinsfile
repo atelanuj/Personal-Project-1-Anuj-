@@ -28,7 +28,7 @@ pipeline{
         }
         stage("Docker image BUILD"){
             steps{
-                sh 'docker build -t anujatel/newbuild-$BUILD_NUMBER .'
+                sh 'docker build -t anujatel/newbuild:$BUILD_NUMBER .'
             }
         }
         stage("push to docker hub"){
@@ -36,7 +36,7 @@ pipeline{
                 withCredentials([string(credentialsId: 'DockerHubPasswd', variable: 'passwd')]) {
                     sh 'docker login -u anujatel -p $passwd'
                 }
-                sh 'docker push anujatel/newbuild-$BUILD_NUMBER'
+                sh 'docker push anujatel/newbuild:$BUILD_NUMBER'
             }
         }
         stage("Deploy to minikube"){
