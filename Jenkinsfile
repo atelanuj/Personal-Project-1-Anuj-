@@ -46,7 +46,7 @@ pipeline{
             steps{
                 script{
                     kubernetesDeploy configs: 'deploymentservice.yaml', kubeConfig: [path: ''], kubeconfigId: 'Newmini', secretName: '', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
-                    sh 'kubectl apply -f deploymentservice.yaml'
+                    sh '/usr/local/bin/kubectl apply -f deploymentservice.yaml'
                 }
             }
         }
