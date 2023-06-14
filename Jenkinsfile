@@ -42,7 +42,7 @@ pipeline{
         stage("Deploy to minikube"){
             steps{
                 script{
-                    kubernetesDeploy (configs: 'deploymentservice.yaml', kubeconfigId: 'Newmini')
+                    kubernetesDeploy(configs: 'deploymentservice.yaml', kubeconfigId: 'Newmini')
                     // sh '/usr/local/bin/kubectl apply -f deploymentservice.yaml'
                 }
             }
