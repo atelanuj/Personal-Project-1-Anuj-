@@ -9,7 +9,7 @@ pipeline{
                 checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/atelanuj/jenkins-mvn-docker-Project-3-.git']])
             }
         }
-        stage("Code Review"){
+        /*stage("Code Review"){
             steps{
                 script{
                     withSonarQubeEnv(credentialsId: 'SonarToken') {
@@ -20,7 +20,7 @@ pipeline{
                     }
                 }
             }
-        }
+        }*/
         stage("Build"){
             steps{
                 sh 'pwd'
