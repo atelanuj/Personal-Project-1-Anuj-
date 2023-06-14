@@ -41,8 +41,9 @@ pipeline{
         }
         stage("Deploy to minikube"){
             steps{
+                sh '/usr/local/bin/kubectl create namespace devops-tools'
                 script{
-                    kubernetesDeploy(configs: 'deploymentservice.yaml', kubeconfigId: 'Newmini')
+                    kubernetesDeploy(configs: 'deploymentservice.yaml' , 'Serviceaccount.yaml', 'PersistantVolume.yaml', kubeconfigId: 'Newmini')
                     // sh '/usr/local/bin/kubectl apply -f deploymentservice.yaml'
                 }
             }
